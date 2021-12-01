@@ -30,7 +30,7 @@ syntax to add colours.
 Build
 -----
 
-    $ rebar3 compile
+    $ epm compile
 
 
 Usage

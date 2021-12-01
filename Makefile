@@ -1,7 +1,7 @@
 TERMCAP_FILE=http://code.metager.de/source/raw/OpenBSD/src/share/termtypes/termtypes.master
 
 all: src/termcap.erl
-	rebar3 compile
+	epm compile
 
 src/termcap.erl: termtypes.master.clean mk-termcap.escript termcap.erl
 	./mk-termcap.escript termtypes.master.clean  > src/cf_term.erl
@@ -15,7 +15,7 @@ clean:
 	[ -f termtypes.master.clean ] && rm termtypes.master.clean || true
 
 compile:
-	rebar3 compile
+	epm compile
 
 termtypes.master.clean: termtypes.master
 	cat termtypes.master | grep -v '^#' | grep -v '^\s*$$' > termtypes.master.clean

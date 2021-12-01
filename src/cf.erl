@@ -12,8 +12,10 @@
 
 
 %% API exports
--export([format/1, format/2]).
--export([print/1,  print/2]).
+-export([
+    format/1, format/2
+    , print/1, print/2
+]).
 
 %%====================================================================
 %% API functions
@@ -66,24 +68,24 @@ format(Fmt) ->
 %%====================================================================
 
 
--define(NX,  "\033[0;30m").
--define(NR,  "\033[0;31m").
--define(NG,  "\033[0;32m").
--define(NY,  "\033[0;33m").
--define(NB,  "\033[0;34m").
--define(NM,  "\033[0;35m").
--define(NC,  "\033[0;36m").
--define(NW,  "\033[0;37m").
--define(BX,  "\033[1;30m").
--define(BR,  "\033[1;31m").
--define(BG,  "\033[1;32m").
--define(BY,  "\033[1;33m").
--define(BB,  "\033[1;34m").
--define(BM,  "\033[1;35m").
--define(BC,  "\033[1;36m").
--define(BW,  "\033[1;37m").
--define(U,   "\033[4m").
--define(B,   "\033[1m").
+-define(NX, "\033[0;30m").
+-define(NR, "\033[0;31m").
+-define(NG, "\033[0;32m").
+-define(NY, "\033[0;33m").
+-define(NB, "\033[0;34m").
+-define(NM, "\033[0;35m").
+-define(NC, "\033[0;36m").
+-define(NW, "\033[0;37m").
+-define(BX, "\033[1;30m").
+-define(BR, "\033[1;31m").
+-define(BG, "\033[1;32m").
+-define(BY, "\033[1;33m").
+-define(BB, "\033[1;34m").
+-define(BM, "\033[1;35m").
+-define(BC, "\033[1;36m").
+-define(BW, "\033[1;37m").
+-define(U, "\033[4m").
+-define(B, "\033[1m").
 -define(BGX, "\033[40m").
 -define(BGR, "\033[41m").
 -define(BGG, "\033[42m").
@@ -92,14 +94,14 @@ format(Fmt) ->
 -define(BGM, "\033[45m").
 -define(BGC, "\033[46m").
 -define(BGW, "\033[47m").
--define(R,   "\033[0m").
+-define(R, "\033[0m").
 -define(CFMT(Char, Colour),
-        cfmt_([$~, $!, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)];
-        cfmt_([$~, $!,  $_, Char | S], Enabled) -> [Colour, ?U | cfmt_(S, Enabled)]).
+    cfmt_([$~, $!, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)];
+    cfmt_([$~, $!, $_, Char | S], Enabled) -> [Colour, ?U | cfmt_(S, Enabled)]).
 -define(CFMT_BG(Char, Colour),
-        cfmt_([$~, $#, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)]).
+    cfmt_([$~, $#, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)]).
 -define(CFMT_U(Char, Colour),
-        cfmt_([$~, $_, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)]).
+    cfmt_([$~, $_, Char | S], Enabled) -> [Colour | cfmt_(S, Enabled)]).
 
 colour_term() ->
     case application:get_env(cf, colour_term) of
@@ -135,26 +137,26 @@ cfmt_([$~, $!, $#, R1, R2, G1, G2, B1, B2 | S], Enabled) ->
     G = list_to_integer([G1, G2], 16),
     B = list_to_integer([B1, B2], 16),
     ["\033[38;2;",
-     integer_to_list(R), $;,
-     integer_to_list(G), $;,
-     integer_to_list(B), $m |
-     cfmt_(S, Enabled)];
+        integer_to_list(R), $;,
+        integer_to_list(G), $;,
+        integer_to_list(B), $m |
+        cfmt_(S, Enabled)];
 
 cfmt_([$~, $#, $#, R1, R2, G1, G2, B1, B2 | S], Enabled) ->
     R = list_to_integer([R1, R2], 16),
     G = list_to_integer([G1, G2], 16),
     B = list_to_integer([B1, B2], 16),
     ["\033[48;2;",
-     integer_to_list(R), $;,
-     integer_to_list(G), $;,
-     integer_to_list(B), $m |
-     cfmt_(S, Enabled)];
+        integer_to_list(R), $;,
+        integer_to_list(G), $;,
+        integer_to_list(B), $m |
+        cfmt_(S, Enabled)];
 
 cfmt_([$~, $!, $_, $_ | S], Enabled) ->
-    [?U |cfmt_(S, Enabled)];
-cfmt_([$~,$!, $^ | S], Enabled) ->
+    [?U | cfmt_(S, Enabled)];
+cfmt_([$~, $!, $^ | S], Enabled) ->
     [?B | cfmt_(S, Enabled)];
-cfmt_([$~,$!, $_, $^ | S], Enabled) ->
+cfmt_([$~, $!, $_, $^ | S], Enabled) ->
     [?U, ?B | cfmt_(S, Enabled)];
 
 ?CFMT($!, ?R);
@@ -184,13 +186,13 @@ cfmt_([$~,$!, $_, $^ | S], Enabled) ->
 ?CFMT_BG($c, ?BGC);
 ?CFMT_BG($w, ?BGW);
 
-cfmt_([$~,$~ | S], Enabled) ->
-    [$~,$~ | cfmt_(S, Enabled)];
+cfmt_([$~, $~ | S], Enabled) ->
+[$~, $~ | cfmt_(S, Enabled)];
 
 cfmt_([C | S], Enabled) ->
-    [C | cfmt_(S, Enabled)];
+[C | cfmt_(S, Enabled)];
 
 cfmt_([], false) ->
-    "";
+"";
 cfmt_([], _Enabled) ->
-    ?R.
+?R.
